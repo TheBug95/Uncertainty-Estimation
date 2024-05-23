@@ -1,10 +1,9 @@
 import torch
 import gc
+from logger import logger   
 
 def clean_gpu():    
-    print("Memoria GPU reservada antes de limpiar: ")
-    print(torch.cuda.memory_reserved())
+    logger.info(f"Memoria GPU reservada antes de limpiar: {torch.cuda.memory_reserved()}")
     gc.collect()
     torch.cuda.empty_cache()
-    print("Memoria GPU reservada despues de limpiar: ")
-    print(torch.cuda.memory_reserved())
+    logger.info(f"Memoria GPU reservada después de limpiar: {torch.cuda.memory_reserved()}")
