@@ -9,22 +9,22 @@ class BaseMethod(ABC):
     @property
     @abstractmethod
     def model(self):
-        return self.__model
+        pass
 
     @model.setter
     @abstractmethod
     def model(self, value):
-        self.__model = value
+        pass
 
     @property
     @abstractmethod
     def data(self):
-        return self.__data
+        pass
 
     @data.setter
     @abstractmethod
     def data(self, value):
-        self.__data = value
+        pass
         
     @abstractmethod
     def calculate_uncertainty(self):
