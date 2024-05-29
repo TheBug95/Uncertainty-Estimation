@@ -1,4 +1,61 @@
-from .metrics import compute_metrics
+from .metrics import compute_accuracy_metrics, calculate_entropy
 from .clean_gpu import clean_gpu
+from .constants import (
+    BATCH_SIZE,
+    DEVICE,
+    GPU,
+    INDEX_DOCUMENT_DATA, 
+    LAYER_INDEX,
+    PATH_CHECKPOINT,
+    PATH_DATASET_TEST,
+    PATH_DATASET_TRAINING,
+    PATH_LOGGER,
+    PATH_MODEL_HF,
+    PATH_SAVE_MODEL,
+    MODEL_STATE_DICT,
+    EVALUATION_STRATEGY,
+    METRIC_BEST_MODEL,
+    SCHEDULER_TYPE,
+    SAVE_STRATEGY,
+    NUM_TRAIN_EPOCHS,
+    SEED,
+    DATA_SEED,
+    LEARNING_RATE,
+    WEIGHT_DECAY,
+    SAVE_TOTAL_LIMIT,
+    EARLY_STOPPING_PATIENCE,
+    TRAIN_BATCH_SIZE,
+    EVAL_BATCH_SIZE
+) 
 
-__all__ = ["compute_metrics", "clean_gpu"]
+
+__all__ = [
+    "compute_accuracy_metrics", 
+    "calculate_entropy",
+    "clean_gpu", 
+    "BATCH_SIZE", 
+    "DEVICE", 
+    "GPU", 
+    "INDEX_DOCUMENT_DATA", 
+    "LAYER_INDEX", 
+    "PATH_CHECKPOINT",
+    "PATH_DATASET_TEST",
+    "PATH_DATASET_TRAINING",
+    "PATH_LOGGER",
+    "PATH_MODEL_HF",
+    "PATH_SAVE_MODEL",
+    "MODEL_STATE_DICT",
+    "EVALUATION_STRATEGY",
+    "METRIC_BEST_MODEL",
+    "SCHEDULER_TYPE",
+    "SAVE_STRATEGY",
+    "NUM_TRAIN_EPOCHS",
+    "SEED",
+    "DATA_SEED",
+    "LEARNING_RATE",
+    "WEIGHT_DECAY",
+    "SAVE_TOTAL_LIMIT",
+    "EARLY_STOPPING_PATIENCE",
+    "TRAIN_BATCH_SIZE",
+    "EVAL_BATCH_SIZE"
+]
