@@ -1,20 +1,38 @@
-class BaseMethod:
+from abc import ABC, abstractmethod 
+
+class BaseMethod(ABC):
+    @abstractmethod
     def __init__(self, model, data):
-        self.model = model
-        self.data = data
+        self.__model = model
+        self.__data = data
 
     @property
-    def get_model(self):
-        return self.model
+    @abstractmethod
+    def model(self):
+        return self.__model
 
     @model.setter
-    def set_model(self, value):
-        self.model = value
+    @abstractmethod
+    def model(self, value):
+        self.__model = value
 
     @property
-    def get_data(self):
-        return self.data
+    @abstractmethod
+    def data(self):
+        return self.__data
 
     @data.setter
-    def set_data(self, value):
-        self.data = value
+    @abstractmethod
+    def data(self, value):
+        self.__data = value
+        
+    @abstractmethod
+    def calculate_uncertainty(self):
+        pass
+    
+    @abstractmethod
+    def make_inference(self):
+        pass
+    
+    
+    
