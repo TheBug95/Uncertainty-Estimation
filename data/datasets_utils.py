@@ -1,6 +1,9 @@
 import os
 import numpy as np
 import pandas as pd
+import torch
+from torch.utils.data import DataLoader
+from utils import BATCH_SIZE
 
 
 def prepare_dataset(dataset, name_col_complex, name_col_simple, tipo, column=1):
@@ -92,3 +95,28 @@ def load_datasets(path_tr, path_te, name_column='simpleManual'):
         test_datasets.append(test_temp)
 
     return train_datasets, val_datasets, test_datasets
+
+
+def get_dataloader_by_dataset(dataset):
+    """
+    Create DataLoaders for tokenized dataset components.
+
+    Parameters:
+    dataset (Dataset): Tokenized dataset containing 'token_type_ids', 'input_ids', and 'attention_mask'.
+    batch_size (int): Batch size for the DataLoaders.
+
+    Returns:
+    tuple: DataLoaders for 'input_ids', 'attention_mask', and 'token_type_ids'.
+    """
+     # Get the labels from the 'test_es' dataset and store them in a NumPy array
+    labels = DataLoader(torch.tensor(dataset["label"]), batch_size = BATCH_SIZE)  
+    # Get token_type_ids and create DataLoader
+    token_type_ids = DataLoader(torch.tensor(dataset['token_type_ids']), batch_size = BATCH_SIZE)
+
+    # Get input_ids and create DataLoader
+    input_ids = DataLoader(torch.tensor(dataset['input_ids']), batch_size = BATCH_SIZE)
+
+    # Get attention_mask and create DataLoader
+    attention_mask = DataLoader(torch.tensor(dataset['attention_mask']), batch_size = BATCH_SIZE)
+
+    return labels, input_ids, attention_mask, token_type_ids
