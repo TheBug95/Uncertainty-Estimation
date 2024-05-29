@@ -1,27 +1,31 @@
+import torch
+import evaluate
+from base_method import BaseMethod
+
 class MCDropout(BaseMethod):
     def __init__(self, dropout_rate, num_samples, model, data):
         super().__init__(model, data)
-        self.dropout_rate = dropout_rate
-        self.num_samples = num_samples
+        self.__dropout_rate = dropout_rate
+        self.__num_samples = num_samples
 
     @property
-    def get_dropout_rate(self):
-        return self._dropout_rate
+    def dropout_rate(self):
+        return self.__dropout_rate
 
 
     @dropout_rate.setter
-    def set_dropout_rate(self, value):
-        self._dropout_rate = value
+    def dropout_rate(self, value):
+        self.__dropout_rate = value
 
 
     @property
-    def get_num_samples(self):
-        return self._num_samples
+    def num_samples(self):
+        return self.__num_samples
 
 
     @num_samples.setter
-    def set_num_samples(self, value):
-        self._num_samples = value
+    def num_samples(self, value):
+        self.__num_samples = value
 
 
     def apply_dropout(self, module, dropout_rate):
@@ -36,7 +40,7 @@ class MCDropout(BaseMethod):
             None
         """
 
-        if type(module) == nn.Dropout:
+        if type(module) == torch.nn.Dropout:
             # Check if the module is of type nn.Dropout
             # Set the dropout rate of the module to the specified dropout_rate
             module.p = dropout_rate
@@ -92,3 +96,8 @@ class MCDropout(BaseMethod):
 
         return predictions_batch
 
+    def calculate_uncertainty(self):
+        pass
+    
+    def make_inference(self):
+        pass 

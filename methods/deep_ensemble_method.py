@@ -1,3 +1,6 @@
+from base_method import BaseMethod
+
+
 class DeepEnsemble(BaseMethod):
     def __init__(self, model, data, num_samples):
         super().__init__(model, data)
@@ -13,3 +16,8 @@ class DeepEnsemble(BaseMethod):
         self.__num_samples = value
 
     
+    def calculate_uncertainty(self):
+        pass
+    
+    def make_inference(self):
+        pass 
