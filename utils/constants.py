@@ -4,7 +4,7 @@ import torch
 # --------------------------------------------- Paths de Google Drive a utilizar --------------------------------------------------------------#
 #----------------------------------------------------------------------------------------------------------------------------------------------#
 PATH_DATASET_TRAINING = './drive/MyDrive/DATASETS_FINANCIAL_TEXT_SIMPLIFICATION/Uncertainty_Datasets/Datasets/Datasets_Training/'
-PATH_DATASET_TEST = './drive/MyDrive/DATASETS_FINANCIAL_TEXT_SIMPLIFICATION/Uncertainty_Datasets/Datasets/Datasets_Test_OOD/'
+PATH_DATASET_TEST = './drive/MyDrive/DATASETS_FINANCIAL_TEXT_SIMPLIFICATION/Uncertainty_Datasets/Datasets/Datasets_Test/'
 PATH_SAVE_MODEL = "./drive/MyDrive/DATASETS_FINANCIAL_TEXT_SIMPLIFICATION/Uncertainty_Datasets/Datasets/Model_Trained/model_trained.bin"
 PATH_CHECKPOINT = "./drive/MyDrive/DATASETS_FINANCIAL_TEXT_SIMPLIFICATION/Uncertainty_Datasets/Datasets/Model_Check_Point/"
 PATH_LOGGER = '/content/drive/MyDrive/DATASETS_FINANCIAL_TEXT_SIMPLIFICATION/Registro_Eventos/log.txt'
@@ -44,3 +44,9 @@ EARLY_STOPPING_PATIENCE = 2
 TRAIN_BATCH_SIZE = 8
 EVAL_BATCH_SIZE = 8
 
+#----------------------------------------------------------------------------------------------------------------------------------------------#
+#---------------------------------------- Tokenizer for BERT Model ------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------------------------------------------#
+
+NAME_COLUMN_SIMPLE_MANUAL = 'simpleManual'
+MAX_NUM_TOKENS = 150
