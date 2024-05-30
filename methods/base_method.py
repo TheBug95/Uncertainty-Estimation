@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 class BaseMethod(ABC):
     @abstractmethod
     def __init__(self, model, data):
-        self.__model = model
-        self.__data = data
+        self._model = model
+        self._data = data
 
     @property
     @abstractmethod
