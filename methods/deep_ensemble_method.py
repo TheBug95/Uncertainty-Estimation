@@ -1,5 +1,4 @@
-from base_method import BaseMethod
-
+from methods import BaseMethod
 
 class DeepEnsemble(BaseMethod):
     def __init__(self, model, data, num_samples):

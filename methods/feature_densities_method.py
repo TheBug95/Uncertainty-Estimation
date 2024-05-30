@@ -1,4 +1,4 @@
-from base_method import BaseMethod
+from methods import BaseMethod
 
 class FeatureDensities(BaseMethod):
 
