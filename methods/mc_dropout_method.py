@@ -1,6 +1,7 @@
 import torch
 import evaluate
-from base_method import BaseMethod
+from methods import BaseMethod
+from utils import DEVICE
 
 class MCDropout(BaseMethod):
     def __init__(self, dropout_rate, num_samples, model, data):
@@ -26,9 +27,27 @@ class MCDropout(BaseMethod):
     @num_samples.setter
     def num_samples(self, value):
         self.__num_samples = value
+        
+    @property
+    def model(self):
+        return self.model
+    
+    @model.setter
+    def model(self, new_model):
+        self.model = new_model
+        
+    @property
+    def data(self):
+        return self.data
+    
+    @data.setter
+    def data(self, new_data):
+        self.data = new_data
+        
+    
 
 
-    def apply_dropout(self, module, dropout_rate):
+    def apply_dropout(self, module):
         """
         Applies dropout to a module and sets the dropout rate.
 
@@ -43,13 +62,13 @@ class MCDropout(BaseMethod):
         if type(module) == torch.nn.Dropout:
             # Check if the module is of type nn.Dropout
             # Set the dropout rate of the module to the specified dropout_rate
-            module.p = dropout_rate
+            module.p = self.dropout_rate
 
             # Set the module in training mode
             module.train()
 
 
-    def make_predictions(self, model, data, droput_rate):
+    def make_predictions(self, data):
         """
         Calculates the predictions using dropout on a given model and test data.
 
@@ -67,13 +86,14 @@ class MCDropout(BaseMethod):
         """
         #Define metric
         metric = evaluate.load("accuracy")
+        input_ids_batch, mask_batch, token_ids_batch = map(lambda t: t.to(DEVICE), data)
 
         #Define device
-        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        model.to(device)
+        model = self.model
+        model.to(DEVICE)
 
         model.eval()
-        model.apply(lambda module: self.apply_dropout(module, dropout_rate))
+        model.apply(lambda module: self.apply_dropout(module, self.dropout_rate))
 
         for batch, re, ma in zip(test_dataloader, reales, mask):
             # Initialize tensor for storing predictions
