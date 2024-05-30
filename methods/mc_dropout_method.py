@@ -1,12 +1,23 @@
 import torch
 import evaluate
-from base_method import BaseMethod
+from methods import BaseMethod
+from data import get_dataloader_by_dataset
+from utils import DEVICE
 
 class MCDropout(BaseMethod):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(MCDropout, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self, dropout_rate, num_samples, model, data):
-        super().__init__(model, data)
-        self.__dropout_rate = dropout_rate
-        self.__num_samples = num_samples
+        if not hasattr(self, '_initialized'):
+            super().__init__(model, data)
+            self.__dropout_rate = dropout_rate
+            self.__num_samples = num_samples
+            self._initialized = True
 
     @property
     def dropout_rate(self):
@@ -26,9 +37,25 @@ class MCDropout(BaseMethod):
     @num_samples.setter
     def num_samples(self, value):
         self.__num_samples = value
+        
+    @property
+    def model(self):
+        return self._model
+    
+    @model.setter
+    def model(self, new_model):
+        self._model = new_model
+        
+    @property
+    def data(self):
+        return self._data
+    
+    @data.setter
+    def data(self, new_data):
+        self._data = new_data
+        
 
-
-    def apply_dropout(self, module, dropout_rate):
+    def __apply_dropout(self, module):
         """
         Applies dropout to a module and sets the dropout rate.
 
@@ -43,13 +70,13 @@ class MCDropout(BaseMethod):
         if type(module) == torch.nn.Dropout:
             # Check if the module is of type nn.Dropout
             # Set the dropout rate of the module to the specified dropout_rate
-            module.p = dropout_rate
+            module.p = self.dropout_rate
 
             # Set the module in training mode
             module.train()
 
 
-    def make_predictions(self, model, data, droput_rate):
+    def make_inference(self):
         """
         Calculates the predictions using dropout on a given model and test data.
 
@@ -67,37 +94,36 @@ class MCDropout(BaseMethod):
         """
         #Define metric
         metric = evaluate.load("accuracy")
+        #input_ids_batch, mask_batch, token_ids_batch,  = map(lambda t: t.to(DEVICE), data)
+        labels_batch, input_ids_batch, mask_batch, _,  = get_dataloader_by_dataset(dataset = self.data)
 
         #Define device
-        device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        model.to(device)
+        model = self.model.to(DEVICE)
+        #model.to(DEVICE)
 
         model.eval()
-        model.apply(lambda module: self.apply_dropout(module, dropout_rate))
+        model.apply(lambda module: self.__apply_dropout(module, self.dropout_rate))
 
-        for batch, re, ma in zip(test_dataloader, reales, mask):
+        for input_ids, labels, masks in zip(input_ids_batch, labels_batch, mask_batch):
             # Initialize tensor for storing predictions
-            predictions_batch=torch.zeros(batch.shape[0], N)
+            predictions_batch = torch.zeros(input_ids.shape[0], self.num_samples)
 
-            for i in range(N):
+            for i in range(self.num_samples):
                 print('Cycle number:', i)
 
                 with torch.no_grad():
-                    batch = batch.cuda()
-                    ma = ma.cuda()
-                    outputs = model(batch, ma)
+                    input_ids = input_ids.cuda()
+                    masks = masks.cuda()
+                    outputs = model(input_ids, masks)
 
                 logits = outputs.logits
                 predictions = torch.argmax(logits, dim=-1)
 
                 # Transpose predictions
                 predictions_batch[:, i] = predictions.unsqueeze(dim=0)
-                metric.add_batch(predictions=predictions, references=re)
+                metric.add_batch(predictions = predictions, references = labels)
 
         return predictions_batch
 
     def calculate_uncertainty(self):
         pass
-    
-    def make_inference(self):
-        pass 

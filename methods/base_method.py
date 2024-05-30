@@ -3,28 +3,28 @@ from abc import ABC, abstractmethod
 class BaseMethod(ABC):
     @abstractmethod
     def __init__(self, model, data):
-        self.__model = model
-        self.__data = data
+        self._model = model
+        self._data = data
 
     @property
     @abstractmethod
     def model(self):
-        return self.__model
+        pass
 
     @model.setter
     @abstractmethod
     def model(self, value):
-        self.__model = value
+        pass
 
     @property
     @abstractmethod
     def data(self):
-        return self.__data
+        pass
 
     @data.setter
     @abstractmethod
     def data(self, value):
-        self.__data = value
+        pass
         
     @abstractmethod
     def calculate_uncertainty(self):
